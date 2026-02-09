@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/user_model.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -28,8 +29,16 @@ class AuthService {
   }
 
   // Check if user profile exists in Firestore
-  Future<bool> isNewUser(String uid) async {
-    DocumentSnapshot doc = await _db.collection('users').doc(uid).get();
-    return !doc.exists;
+  Future<UserModel?> getUserData(String uid) async {
+  // We do ONE read here
+  DocumentSnapshot doc = await _db.collection('users').doc(uid).get();
+
+  if (doc.exists) {
+    // Convert the data we already fetched into our model
+    return UserModel.fromMap(doc.data() as Map<String, dynamic>);
+  } else {
+    // User doesn't exist in Firestore yet
+    return null;
   }
+}
 }

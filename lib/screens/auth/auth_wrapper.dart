@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../services/auth_service.dart';
-import '../home/home_screen.dart';
+import '../home/main_screen.dart';
 import 'login_screen.dart';
 import 'uni_selection_screen.dart';
 
@@ -36,7 +36,7 @@ class AuthWrapper extends ConsumerWidget {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   ref.read(userProvider.notifier).state = snapshot.data;
                 });
-                return const HomeScreen(); 
+                return const MainScreen(); 
               } else {
                 // New user! Go to Uni Selection
                 return UniSelectionScreen(firebaseUser: firebaseUser);
@@ -46,7 +46,7 @@ class AuthWrapper extends ConsumerWidget {
         }
 
         // User is fully logged in and has a profile
-        return const HomeScreen();
+        return const MainScreen();
       },
       loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, stack) => Scaffold(body: Center(child: Text("Error: $e"))),

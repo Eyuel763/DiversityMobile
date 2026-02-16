@@ -44,4 +44,50 @@ class PostService {
       'reactionCounts.$reactionType': FieldValue.increment(value),
     });
   }
+
+  Future<void> toggleReaction({
+  required String postId,
+  required String userId,
+  required String reactionType,
+}) async {
+  final reactionRef = _db.collection('posts').doc(postId).collection('reactions').doc(userId);
+  final postRef = _db.collection('posts').doc(postId);
+
+  final doc = await reactionRef.get();
+
+  if (doc.exists) {
+    String existingType = doc.data()?['type'];
+
+    if (existingType == reactionType) {
+      // User clicked the same reaction -> Remove reaction
+      await reactionRef.delete();
+      await postRef.update({
+        'reactionCounts.$reactionType': FieldValue.increment(-1),
+      });
+    } else {
+      // User changed reaction -> Update reaction type
+      await reactionRef.update({'type': reactionType});
+      await postRef.update({
+        'reactionCounts.$existingType': FieldValue.increment(-1),
+        'reactionCounts.$reactionType': FieldValue.increment(1),
+      });
+    }
+  } else {
+    // New reaction
+    await reactionRef.set({'type': reactionType});
+    await postRef.update({
+      'reactionCounts.$reactionType': FieldValue.increment(1),
+    });
+  }
+}
+
+Stream<String?> getUserReaction(String postId, String userId) {
+  return _db
+      .collection('posts')
+      .doc(postId)
+      .collection('reactions')
+      .doc(userId)
+      .snapshots()
+      .map((doc) => doc.exists ? (doc.data()?['type'] as String?) : null);
+}
 }

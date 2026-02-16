@@ -45,10 +45,10 @@ class LoginScreen extends ConsumerWidget {
                 foregroundColor: Colors.black,
                 minimumSize: const Size(double.infinity, 50),
               ),
-              icon: Image.network(
-                'https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_Color_Icon.svg',
+              icon: Image.asset(
+                'assets/icons/google.png',
                 height: 24,
-              ), // Will change to asset image later
+              ), 
               label: const Text("Continue with Google"),
               onPressed: () async {
                 final user = await _auth.signInWithGoogle();

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../models/post_model.dart';
 import '../providers/user_provider.dart';
 import '../services/post_service.dart';
+import '../screens/confessions/comment_sheet.dart';
 
 class ConfessionCard extends ConsumerWidget {
   final PostModel post;
@@ -119,12 +120,44 @@ class ConfessionCard extends ConsumerWidget {
                   "laugh",
                   post.reactionCounts['laugh'] ?? 0,
                 ),
-                _buildReaction(
-                  ref,
-                  Icons.lightbulb_outline,
-                  Icons.lightbulb,
-                  "thoughtProvoking",
-                  post.reactionCounts['thoughtProvoking'] ?? 0,
+                // _buildReaction(
+                //   ref,
+                //   Icons.lightbulb_outline,
+                //   Icons.lightbulb,
+                //   "thoughtProvoking",
+                //   post.reactionCounts['thoughtProvoking'] ?? 0,
+                // ),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.mode_comment_outlined,
+                        size: 20,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20),
+                            ),
+                          ),
+                          builder: (context) =>
+                              CommentSheet(postId: post.postId),
+                        );
+                      },
+                    ),
+                    Text(
+                      "${post.commentCount}",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -138,7 +171,7 @@ class ConfessionCard extends ConsumerWidget {
                     size: 12,
                     color: Colors.grey[500],
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(width: 2),
                   Text(
                     "${post.viewCount}",
                     style: TextStyle(fontSize: 11, color: Colors.grey[500]),
@@ -182,9 +215,8 @@ class ConfessionCard extends ConsumerWidget {
             child: Column(
               children: [
                 Icon(
-                  // SWAP THE ICON HERE
                   isSelected ? activeIcon : inactiveIcon,
-                  size: 22, // Slightly larger to feel more like a "button"
+                  size: 22,
                   color: isSelected ? Colors.black : Colors.grey[600],
                 ),
                 const SizedBox(height: 2),

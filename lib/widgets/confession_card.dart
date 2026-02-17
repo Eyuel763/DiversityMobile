@@ -94,7 +94,7 @@ class ConfessionCard extends ConsumerWidget {
 
             const Divider(height: 24),
 
-            // Reactions Row (Now interactive)
+            // Reactions Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -127,6 +127,24 @@ class ConfessionCard extends ConsumerWidget {
                   post.reactionCounts['thoughtProvoking'] ?? 0,
                 ),
               ],
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.remove_red_eye_outlined,
+                    size: 12,
+                    color: Colors.grey[500],
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    "${post.viewCount}",
+                    style: TextStyle(fontSize: 11, color: Colors.grey[500]),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

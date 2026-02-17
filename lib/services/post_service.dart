@@ -81,6 +81,12 @@ class PostService {
   }
 }
 
+Future<void> incrementViewCount(String postId) async {
+  await _db.collection('posts').doc(postId).update({
+    'viewCount': FieldValue.increment(1),
+  });
+}
+
 Stream<String?> getUserReaction(String postId, String userId) {
   return _db
       .collection('posts')

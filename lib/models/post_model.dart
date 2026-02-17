@@ -11,6 +11,7 @@ class PostModel {
   final Map<String, int> reactionCounts;
   final int commentCount;
   final DateTime createdAt;
+  final int viewCount;
 
   PostModel({
     required this.postId,
@@ -28,6 +29,7 @@ class PostModel {
     },
     this.commentCount = 0,
     required this.createdAt,
+    this.viewCount = 0,
   });
 
   // Convert Firestore Doc to PostModel
@@ -42,6 +44,7 @@ class PostModel {
       tags: List<String>.from(map['tags'] ?? []),
       reactionCounts: Map<String, int>.from(map['reactionCounts'] ?? {}),
       commentCount: map['commentCount'] ?? 0,
+      viewCount: map['viewCount'] ?? 0,
       createdAt: (map['createdAt'] as Timestamp).toDate(),
     );
   }
